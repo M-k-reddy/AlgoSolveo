@@ -4,6 +4,30 @@ AlgoSolveo is an interactive, AI-powered LeetCode & DSA mentor side panel Chrome
 
 ---
 
+## 🚀 Getting Started & Installation
+
+### 1. Load the Extension in Chrome
+1. Download or clone this repository to your computer.
+2. Open Google Chrome and navigate to `chrome://extensions/`.
+3. Toggle the **Developer mode** switch in the top-right corner to **ON**.
+4. Click the **Load unpacked** button in the top-left corner.
+5. Select the `leetcode-mentor-extension` folder.
+
+### 2. Configure Your AI Provider
+1. Click the **Extensions** (puzzle piece) icon in your Chrome toolbar and open **AlgoSolveo**.
+2. Click the **Settings ⚙️** (gear icon) in the top-right of the side panel.
+3. Choose your preferred AI Provider (e.g. **Groq**, **OpenAI**, or **Ollama**).
+4. Enter your API key and choose the model, then click **Save Settings**.
+
+### 3. Start Solving!
+1. Open any problem on [LeetCode](https://leetcode.com/problems/).
+2. Click the **Sync 🔄** button in the header if the problem details do not load automatically.
+3. Click the code bracket icon **`</>`** in the chat footer to instantly grab code directly from the LeetCode code editor.
+4. Select your preferred teaching style (**Beginner**, **Socratic**, or **Direct**) from the dropdown in the footer.
+5. Ask a question or click any quick action button (e.g. **💡 Get Hint**, **📚 Explain Concept**, **🔍 Review Code**) to start!
+
+---
+
 ## 🗺️ Roadmap & Problems Source
 The collapsible pattern roadmap in this extension is populated with **315 curated DSA problems across 49 patterns**. 
 - **Source:** Compiled from curated, industry-standard DSA patterns and problem-solving tracks.
