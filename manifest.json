@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "AlgoSolveo - LeetCode Mentor",
+  "version": "1.0",
+  "description": "Your AI-powered LeetCode & DSA mentor inside Chrome. Master coding interviews with 5 intelligent modes.",
+  "permissions": [
+    "sidePanel",
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://leetcode.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Open AlgoSolveo"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlgoSolveo - LeetCode Mentor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body class="dark-mode">
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-emoji">🥋</span>
+        <div class="logo-text">
+          <h1>AlgoSolveo</h1>
+          <span class="logo-subtitle">Your DSA Mentor</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="sync-problem-btn" class="icon-btn" title="Sync Problem and Code">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </button>
+        <button id="header-clear-chat-btn" class="icon-btn" title="Clear Current Chat">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+        <button id="toggle-history-btn" class="icon-btn" title="Saved Chats">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+        </button>
+        <button id="toggle-roadmap-btn" class="icon-btn" title="Pattern Roadmap">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </button>
+        <button id="toggle-settings-btn" class="icon-btn" title="Settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Problem Status Bar -->
+    <section class="problem-status-bar">
+      <div id="problem-info" class="problem-info empty">
+        <span class="status-indicator"></span>
+        <div class="problem-details">
+          <p id="problem-title" class="title">No LeetCode problem detected</p>
+          <div class="difficulty-wrapper">
+            <span id="problem-difficulty" class="difficulty">Open a problem on LeetCode</span>
+            <span class="difficulty-separator hidden">|</span>
+            <select id="header-language-select" class="header-lang-select hidden">
+              <option value="Java">Java</option>
+              <option value="Python">Python</option>
+              <option value="C++">C++</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="Go">Go</option>
+              <option value="TypeScript">TypeScript</option>
+              <option value="Rust">Rust</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mode Selector Tabs -->
+    <nav class="mode-selector">
+      <button class="mode-tab active" data-mode="AUTO" title="Auto Mode Detection">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg>
+        </span>
+        <span class="mode-name">Auto</span>
+      </button>
+      <button class="mode-tab" data-mode="TUTOR" title="Tutor Mode">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V5A2.5 2.5 0 0 1 6.5 2.5H20v14.5H6.5a2.5 2.5 0 0 0-2.5 2.5z"/></svg>
+        </span>
+        <span class="mode-name">Tutor</span>
+      </button>
+      <button class="mode-tab" data-mode="HINT" title="Hint Mode">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .6 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5z"/></svg>
+        </span>
+        <span class="mode-name">Hint</span>
+      </button>
+      <button class="mode-tab" data-mode="REVIEW" title="Review Mode">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <span class="mode-name">Review</span>
+      </button>
+      <button class="mode-tab" data-mode="INTERVIEW" title="Interview Mode">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 19v4M8 23h8"/></svg>
+        </span>
+        <span class="mode-name">Interview</span>
+      </button>
+      <button class="mode-tab" data-mode="PATTERN" title="Pattern Mapper Mode">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+        </span>
+        <span class="mode-name">Pattern</span>
+      </button>
+    </nav>
+
+    <!-- Settings Slide Panel -->
+    <section id="settings-panel" class="settings-panel hidden">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="close-settings-btn" class="icon-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="settings-content">
+        <div class="settings-group">
+          <label for="provider-select">AI Provider</label>
+          <select id="provider-select">
+            <option value="groq">Groq (Free & Fast)</option>
+            <option value="ollama">Ollama (Local LLM)</option>
+            <option value="openai">OpenAI (ChatGPT)</option>
+          </select>
+        </div>
+
+        <!-- Provider Specific Groups -->
+        <div id="groq-group" class="provider-specific">
+          <div class="settings-group">
+            <label for="groq-key-input">Groq API Key</label>
+            <div class="api-key-container">
+              <input type="password" id="groq-key-input" placeholder="gsk_...">
+              <button id="test-groq-btn" class="secondary-btn compact-btn">Test</button>
+            </div>
+            <span id="groq-status" class="help-text">Get a free, high-speed API Key from <a href="https://console.groq.com/" target="_blank">Groq Console</a></span>
+          </div>
+          <div class="settings-group">
+            <label for="groq-model-select">Groq Model</label>
+            <select id="groq-model-select">
+              <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Versatile - Smartest)</option>
+              <option value="llama-3.1-8b-instant">Llama 3.1 8B (Instant - High Limit)</option>
+              <option value="deepseek-r1-distill-llama-70b">DeepSeek R1 70B (Reasoning Distilled)</option>
+              <option value="gemma2-9b-it">Gemma 2 9B (Google - Fast & Smart)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="ollama-group" class="provider-specific hidden">
+          <div class="settings-group">
+            <label for="ollama-url-input">Ollama Server URL</label>
+            <div class="api-key-container">
+              <input type="text" id="ollama-url-input" placeholder="http://localhost:11434" value="http://localhost:11434">
+              <button id="test-ollama-btn" class="secondary-btn compact-btn">Test</button>
+            </div>
+            <span id="ollama-status" class="help-text">Start Ollama on your machine, or enter a remote server URL.</span>
+          </div>
+          <div class="settings-group">
+            <label for="ollama-key-input">Ollama API Key (Optional)</label>
+            <input type="password" id="ollama-key-input" placeholder="ollama_...">
+            <span class="help-text">Required if accessing Ollama Cloud or a remote secure server.</span>
+          </div>
+          <div class="settings-group">
+            <label for="ollama-model-select">Ollama Model</label>
+            <select id="ollama-model-select" style="margin-bottom: 8px;">
+              <option value="gpt-oss:20b">gpt-oss:20b (Best - Cloud)</option>
+              <option value="custom">Custom model...</option>
+            </select>
+            <input type="text" id="ollama-model-input" class="hidden" placeholder="Enter custom model name" value="gpt-oss:20b">
+            <span class="help-text">Choose a model, or select "Custom model..." to type a specific model ID.</span>
+          </div>
+        </div>
+
+        <div id="openai-group" class="provider-specific hidden">
+          <div class="settings-group">
+            <label for="openai-key-input">OpenAI API Key</label>
+            <div class="api-key-container">
+              <input type="password" id="openai-key-input" placeholder="sk-...">
+              <button id="test-openai-btn" class="secondary-btn compact-btn">Test</button>
+            </div>
+            <span id="openai-status" class="help-text">Verify your ChatGPT API Key.</span>
+          </div>
+          <div class="settings-group">
+            <label for="openai-model-select">OpenAI Model</label>
+            <select id="openai-model-select">
+              <option value="gpt-4o-mini">GPT-4o Mini (Recommended)</option>
+              <option value="gpt-4o">GPT-4o (Paid/Smart)</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-group">
+          <label for="language-select">Preferred Language</label>
+          <select id="language-select">
+            <option value="Python">Python</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="Java">Java</option>
+            <option value="C++">C++</option>
+            <option value="Go">Go</option>
+            <option value="TypeScript">TypeScript</option>
+            <option value="Rust">Rust</option>
+          </select>
+        </div>
+        <div class="settings-group">
+          <label for="tutor-style">Tutor Style</label>
+          <select id="tutor-style">
+            <option value="Beginner-Friendly">Beginner-Friendly (Simple code & analogies)</option>
+            <option value="Socratic">Socratic (Guided questions)</option>
+            <option value="Direct">Direct (Explanatory)</option>
+          </select>
+        </div>
+        <div class="settings-group">
+          <label for="interviewer-personality">Interviewer Persona</label>
+          <select id="interviewer-personality">
+            <option value="Neutral">Neutral (Standard corporate)</option>
+            <option value="Friendly">Friendly & Encouraging</option>
+            <option value="Challenging">Challenging & Probing</option>
+          </select>
+        </div>
+        <div class="settings-group checkbox-group">
+          <input type="checkbox" id="auto-sync-code">
+          <label for="auto-sync-code">Auto-sync code from LeetCode editor</label>
+        </div>
+        <button id="save-settings-btn" class="primary-btn">Save Settings</button>
+        <button id="clear-chat-btn" class="secondary-btn">Clear Chat History</button>
+      </div>
+    </section>
+
+    <!-- History Slide Panel -->
+    <section id="history-panel" class="settings-panel hidden left-panel">
+      <div class="settings-header">
+        <h2>Saved Chats</h2>
+        <button id="close-history-btn" class="icon-btn" title="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="settings-content" style="overflow-y: auto; flex-grow: 1; padding: 0;">
+        <div id="history-list" class="history-list">
+          <div class="history-empty">No saved chats yet. Start a conversation on a LeetCode problem!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap Slide Panel -->
+    <section id="roadmap-panel" class="settings-panel hidden left-panel">
+      <div class="settings-header">
+        <h2>Pattern Roadmap</h2>
+        <button id="close-roadmap-btn" class="icon-btn" title="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="settings-content" style="overflow-y: auto; flex-grow: 1; padding: 16px;">
+        <div id="roadmap-list" class="roadmap-list">
+          <!-- Dynamically populated patterns -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat Area -->
+    <main class="chat-area">
+      <div id="chat-history" class="chat-history">
+        <!-- Welcomes/Messages will be generated dynamically -->
+        <div class="message system">
+          <div class="message-content">
+            <p>💡 <strong>Welcome to AlgoSolveo!</strong></p>
+            <p>I am your personal Data Structures & Algorithms mentor. Let's master problem solving together, not just copy-paste solutions!</p>
+            <p class="instruction">To get started:</p>
+            <ol>
+              <li>Open a problem on <strong>LeetCode</strong>.</li>
+              <li>Configure your <strong>AI Provider</strong> (e.g. Groq) in settings (gear icon top right).</li>
+              <li>Select a mode above or click one of the quick action prompts below!</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div id="typing-indicator" class="typing-indicator hidden">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="mode-label">AlgoSolveo is thinking...</span>
+      </div>
+    </main>
+
+    <!-- Quick Action Prompts (Footer Actions) -->
+    <section class="quick-actions">
+      <button class="quick-btn" data-action="hint">💡 Get Hint</button>
+      <button class="quick-btn" data-action="explain">📚 Explain Concept</button>
+      <button class="quick-btn" data-action="review">🔍 Review Code</button>
+      <button class="quick-btn" data-action="pattern">🗺️ Map Pattern</button>
+      <button class="quick-btn" data-action="interview">🎤 Mock Interview</button>
+    </section>
+
+    <!-- Footer Controls -->
+    <footer class="app-footer">
+      <div class="input-container">
+        <textarea id="chat-input" placeholder="Ask AlgoSolveo... (e.g. LC3, explain Two Sum, give a hint)" rows="1"></textarea>
+        <div class="input-actions">
+          <select id="footer-tutor-style" class="footer-style-select" title="Tutor Style">
+            <option value="Beginner-Friendly">Beginner</option>
+            <option value="Socratic">Socratic</option>
+            <option value="Direct">Direct</option>
+          </select>
+          <button id="grab-code-btn" class="footer-action-btn" title="Grab Code from Editor">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span id="code-sync-badge" class="sync-badge hidden"></span>
+          </button>
+          <button id="send-msg-btn" class="send-btn" disabled>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </footer>
+    <!-- Language Selector Modal popup -->
+    <div id="language-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Select Programming Language</h3>
+        <p>AlgoSolveo has mapped the problem. Select your language to customize explanations and code solutions:</p>
+        <div class="language-options">
+          <button class="lang-opt-btn" data-lang="Java">Java</button>
+          <button class="lang-opt-btn" data-lang="Python">Python</button>
+          <button class="lang-opt-btn" data-lang="C++">C++</button>
+          <button class="lang-opt-btn" data-lang="JavaScript">JavaScript</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="markdown.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
