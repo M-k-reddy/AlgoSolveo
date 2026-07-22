@@ -145,7 +145,7 @@
           <div class="settings-group">
             <label for="ollama-url-input">Ollama Server URL</label>
             <div class="api-key-container">
-              <input type="text" id="ollama-url-input" placeholder="http://localhost:11434" value="http://localhost:11434">
+              <input type="text" id="ollama-url-input" placeholder="https://ollama.com/api" value="https://ollama.com/api">
               <button id="test-ollama-btn" class="secondary-btn compact-btn">Test</button>
             </div>
             <span id="ollama-status" class="help-text">Start Ollama on your machine, or enter a remote server URL.</span>
@@ -159,10 +159,9 @@
             <label for="ollama-model-select">Ollama Model</label>
             <select id="ollama-model-select" style="margin-bottom: 8px;">
               <option value="gpt-oss:20b">gpt-oss:20b (Best - Cloud)</option>
-              <option value="custom">Custom model...</option>
             </select>
-            <input type="text" id="ollama-model-input" class="hidden" placeholder="Enter custom model name" value="gpt-oss:20b">
-            <span class="help-text">Choose a model, or select "Custom model..." to type a specific model ID.</span>
+            <input type="hidden" id="ollama-model-input" value="gpt-oss:20b">
+            <span class="help-text">Default model for the Ollama connection.</span>
           </div>
         </div>
 
@@ -198,7 +197,7 @@
         <div class="settings-group">
           <label for="tutor-style">Tutor Style</label>
           <select id="tutor-style">
-            <option value="Beginner-Friendly">Beginner-Friendly (Simple code & analogies)</option>
+            <option value="Beginner-Friendly" selected>Beginner-Friendly (Simple code & analogies)</option>
             <option value="Socratic">Socratic (Guided questions)</option>
             <option value="Direct">Direct (Explanatory)</option>
           </select>
@@ -288,7 +287,7 @@
         <textarea id="chat-input" placeholder="Ask AlgoSolveo... (e.g. LC3, explain Two Sum, give a hint)" rows="1"></textarea>
         <div class="input-actions">
           <select id="footer-tutor-style" class="footer-style-select" title="Tutor Style">
-            <option value="Beginner-Friendly">Beginner</option>
+            <option value="Beginner-Friendly" selected>Beginner</option>
             <option value="Socratic">Socratic</option>
             <option value="Direct">Direct</option>
           </select>

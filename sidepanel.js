@@ -1,7 +1,7 @@
 // State Management
 let state = {
   preferredLanguage: "Python",
-  tutorStyle: "Socratic",
+  tutorStyle: "Beginner-Friendly",
   interviewerPersonality: "Neutral",
   autoSyncCode: false,
   activeMode: "AUTO", // AUTO, TUTOR, HINT, REVIEW, INTERVIEW, PATTERN
@@ -14,9 +14,9 @@ let state = {
   provider: "groq", // groq, ollama, openai
   groqKey: "",
   groqModel: "llama-3.3-70b-versatile",
-  ollamaUrl: "http://localhost:11434",
+  ollamaUrl: "https://ollama.com/api",
   ollamaKey: "",
-  ollamaModel: "llama3",
+  ollamaModel: "gpt-oss:20b",
   openaiKey: "",
   openaiModel: "gpt-4o-mini",
   activeGroqModels: [] // Cache for active Groq models fetched dynamically
@@ -111,7 +111,7 @@ async function loadSettings() {
       (result) => {
         state.preferredLanguage = result.preferredLanguage || "Python";
         state.hasSelectedLanguage = result.hasSelectedLanguage || false;
-        state.tutorStyle = result.tutorStyle || "Socratic";
+        state.tutorStyle = result.tutorStyle || "Beginner-Friendly";
         state.interviewerPersonality = result.interviewerPersonality || "Neutral";
         state.autoSyncCode = !!result.autoSyncCode;
         state.chatHistory = result.chatHistory || [];
@@ -125,9 +125,9 @@ async function loadSettings() {
         }
         state.groqKey = result.groqKey || "";
         state.groqModel = result.groqModel || "llama-3.3-70b-versatile";
-        state.ollamaUrl = result.ollamaUrl || "http://localhost:11434";
+        state.ollamaUrl = result.ollamaUrl || "https://ollama.com/api";
         state.ollamaKey = result.ollamaKey || "";
-        state.ollamaModel = result.ollamaModel || "llama3";
+        state.ollamaModel = result.ollamaModel || "gpt-oss:20b";
         state.openaiKey = result.openaiKey || "";
         state.openaiModel = result.openaiModel || "gpt-4o-mini";
         
@@ -880,11 +880,11 @@ function setupEventListeners() {
   chatInputEl.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      sendMessage(true);
     }
   });
 
-  sendMsgBtn.addEventListener("click", sendMessage);
+  sendMsgBtn.addEventListener("click", () => sendMessage(true));
 
   // Sync actions
   syncProblemBtn.addEventListener("click", () => syncFromActiveTab(true));
@@ -1544,7 +1544,7 @@ function triggerQuickAction(action) {
 
   chatInputEl.value = prompt;
   sendMsgBtn.disabled = false;
-  sendMessage();
+  sendMessage(false);
 }
 
 // Clear Chat Action
@@ -1629,10 +1629,20 @@ function appendMessageToDOM(role, text, mode) {
   chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
 }
 
-// Main Send Message Handler
-async function sendMessage() {
+async function sendMessage(isCustom = true) {
   const text = chatInputEl.value.trim();
   if (!text) return;
+
+  // Revert custom user-typed questions back to AUTO mode so AI responds conversationally
+  if (isCustom && state.activeMode !== "INTERVIEW" && state.activeMode !== "AUTO") {
+    state.activeMode = "AUTO";
+    const autoTab = Array.from(modeTabs).find(tab => tab.getAttribute("data-mode") === "AUTO");
+    if (autoTab) {
+      modeTabs.forEach(t => t.classList.remove("active"));
+      autoTab.classList.add("active");
+      updateThemeForMode("AUTO");
+    }
+  }
 
   // Verify that the user is currently on a LeetCode page
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -1776,7 +1786,7 @@ async function callLLM() {
     headers["Authorization"] = `Bearer ${state.groqKey}`;
     model = state.groqModel || "llama-3.3-70b-versatile";
   } else if (provider === "ollama") {
-    let baseUrl = state.ollamaUrl || "http://localhost:11434";
+    let baseUrl = state.ollamaUrl || "https://ollama.com/api";
     const cleanUrl = baseUrl.replace(/\/$/, "");
     const isOpenAICompatible = cleanUrl.includes("/v1") || cleanUrl.includes("/v1/") || cleanUrl.endsWith("/v1");
     
@@ -2291,6 +2301,15 @@ Master pattern recognition dynamically:
     activeModeInstructions = modeInstructions[state.activeMode] || "";
   }
 
+  const isFollowUp = state.chatHistory.length > 1;
+  const followUpInstruction = isFollowUp ? `
+=== IMPORTANT: FOLLOW-UP CONVERSATION ===
+This is a follow-up conversation turn. The user has already received the initial structured explanation/hint/review.
+- DO NOT output the full structured templates (e.g. do not print the 7-step tutor sections, progressive hint levels, or template blocks) again.
+- Answer the user's specific new question directly, naturally, and conversationally.
+- Maintain the same preferred programming language (${activeLang}), tutor style (${state.tutorStyle || "Beginner-Friendly"}), and interviewer persona.
+` : "";
+
   return `
 You are AlgoSolveo 🥋, a master DSA (Data Structures & Algorithms) mentor specialized in helping developers master LeetCode and technical interviews. Your teaching philosophy emphasizes Socratic learning, building pattern-recognition skills, and structured communication.
 
@@ -2314,6 +2333,8 @@ Automatically select the best mode based on the user's message:
 ${activeModeInstructions}
 
 ${problemContext}
+
+${followUpInstruction}
 
 === ETHICS & WRITING STYLE ===
 - Keep responses concise and scannable. Avoid giant blocks of text. Use bullet points and headers.

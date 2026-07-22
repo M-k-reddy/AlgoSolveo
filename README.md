@@ -11,12 +11,18 @@ AlgoSolveo is an interactive, AI-powered LeetCode & DSA mentor side panel Chrome
 2. Open Google Chrome and navigate to `chrome://extensions/`.
 3. Toggle the **Developer mode** switch in the top-right corner to **ON**.
 4. Click the **Load unpacked** button in the top-left corner.
-5. Select the `leetcode-mentor-extension` folder.
+5. Select the `AlgoSolveo-main` folder (or the name of the folder where you extracted the ZIP).
 
 ### 2. Configure Your AI Provider
 1. Click the **Extensions** (puzzle piece) icon in your Chrome toolbar and open **AlgoSolveo**.
 2. Click the **Settings ⚙️** (gear icon) in the top-right of the side panel.
-3. Choose your preferred AI Provider (e.g. **Groq**, **OpenAI**, or **Ollama**).
+3. Choose your preferred AI Provider (e.g. **Groq**, **OpenAI**, or **Ollama**):
+   - **Ollama Cloud / Server:** Leave the URL as `https://ollama.com/api`. To get your Ollama API key:
+     1. Log in to the [Ollama website](https://ollama.com).
+     2. Navigate to **Settings** (`https://ollama.com/settings`).
+     3. Go to **Keys** (`https://ollama.com/settings/keys`) to create and copy your API key.
+   - **Groq:** Get your API key from the [Groq Console](https://console.groq.com).
+   - **OpenAI:** Get your API key from the [OpenAI Platform](https://platform.openai.com).
 4. Enter your API key and choose the model, then click **Save Settings**.
 
 ### 3. Start Solving!
