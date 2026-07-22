@@ -20,7 +20,8 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === "complete" && tab.url && tab.url.includes("leetcode.com")) {
+  // Listen for both page load completion and URL changes (for LeetCode SPA routing)
+  if ((changeInfo.status === "complete" || changeInfo.url) && tab.url && tab.url.includes("leetcode.com")) {
     chrome.runtime.sendMessage({
       type: "TAB_UPDATED",
       tabId: tabId,

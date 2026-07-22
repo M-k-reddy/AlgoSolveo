@@ -1342,18 +1342,25 @@ async function syncFromActiveTab(manual = false) {
   }
 
   try {
-    // Attempt sending message to content script
-    let response;
-    try {
-      response = await chrome.tabs.sendMessage(tab.id, { type: "SCRAPE_PROBLEM" });
-    } catch (e) {
-      // Content script might not be injected yet. Inject it manually.
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ["content.js"]
-      });
-      // Try once more after injection
-      response = await chrome.tabs.sendMessage(tab.id, { type: "SCRAPE_PROBLEM" });
+    // Attempt sending message to content script with a retry loop
+    // to give LeetCode's client-side SPA router time to render the DOM elements.
+    let response = null;
+    let attempts = 4;
+    while (attempts > 0) {
+      try {
+        response = await chrome.tabs.sendMessage(tab.id, { type: "SCRAPE_PROBLEM" });
+        if (response && !response.error && response.title && response.description) {
+          break;
+        }
+      } catch (e) {
+        // Content script might not be injected yet. Inject it manually.
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ["content.js"]
+        }).catch(() => {});
+      }
+      await new Promise(resolve => setTimeout(resolve, 300));
+      attempts--;
     }
 
     if (response && !response.error) {
