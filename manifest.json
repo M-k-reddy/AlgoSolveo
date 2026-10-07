@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AlgoSolveo - LeetCode Mentor",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Your AI-powered LeetCode & DSA mentor inside Chrome. Master coding interviews with 5 intelligent modes.",
   "permissions": [
     "sidePanel",
@@ -11,8 +11,11 @@
   ],
   "host_permissions": [
     "https://leetcode.com/*",
-    "https://generativelanguage.googleapis.com/*",
-    "<all_urls>"
+    "https://api.groq.com/*",
+    "https://api.openai.com/*",
+    "https://ollama.com/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
   ],
   "background": {
     "service_worker": "background.js"
