@@ -88,6 +88,7 @@ const langOptBtns = document.querySelectorAll(".lang-opt-btn");
 document.addEventListener("DOMContentLoaded", async () => {
   await loadSettings();
   setupEventListeners();
+  setupAccountUI();
   updateProviderUI();
   await loadGroqModelsDynamically();
   await syncFromActiveTab();
@@ -118,7 +119,7 @@ async function loadSettings() {
         state.sessions = result.sessions || {};
         state.solvedProblems = result.solvedProblems || [];
         
-        state.provider = result.provider || "groq";
+        state.provider = result.provider || "algosolveo";
         // Migrate old provider values to groq
         if (state.provider === "chrome-ai" || state.provider === "gemini") {
           state.provider = "groq";
@@ -972,6 +973,11 @@ function setupEventListeners() {
           solved.push(problemSlug);
         }
         state.solvedProblems = solved;
+        Auth.getSession().then(s => {
+          if (!s) return;
+          (solved.includes(problemSlug) ? Auth.markSolved(problemSlug) : Auth.markUnsolved(problemSlug))
+            .catch(err => console.warn("Progress sync failed", err));
+        });
         chrome.storage.local.set({ solvedProblems: solved }, () => {
           populateRoadmap();
         });
@@ -1680,6 +1686,13 @@ async function sendMessage(isCustom = true) {
     return;
   }
 
+  // Hosted AI needs a signed-in user instead of an API key
+  if (state.provider === "algosolveo" && !(await Auth.getValidSession())) {
+    showSystemNotification("Sign in with Google in Settings to use AlgoSolveo AI.", "warning");
+    settingsPanel.classList.remove("hidden");
+    return;
+  }
+
   // Validate active provider configuration
   let configError = false;
   if (state.provider === "groq" && !state.groqKey) {
@@ -1782,6 +1795,20 @@ async function sendMessage(isCustom = true) {
 async function callLLM() {
   const provider = state.provider || "groq";
   const systemPromptText = buildSystemPrompt();
+
+  // Hosted AlgoSolveo AI (Supabase Edge Function, your server-side Ollama key)
+  if (provider === "algosolveo") {
+    const msgs = [{ role: "system", content: systemPromptText }];
+    state.chatHistory.forEach(m => msgs.push({ role: m.role === "user" ? "user" : "assistant", content: m.text }));
+    try {
+      const data = await Auth.askHostedAI(msgs);
+      if (data.hints_left >= 0) showSystemNotification(`${data.hints_left} free hints left today`, "info");
+      return data.text;
+    } catch (e) {
+      if (e.code === "LIMIT_REACHED") showSystemNotification(e.message, "warning");
+      throw e;
+    }
+  }
 
   // OpenAI-compatible Providers (Groq, Ollama, OpenAI)
   let url = "";
@@ -2435,3 +2462,50 @@ function populateHistoryList() {
 }
 
 
+
+
+// ---------- Account (Supabase Google sign-in) ----------
+async function refreshAccountUI() {
+  const out = document.getElementById("account-signed-out");
+  const inn = document.getElementById("account-signed-in");
+  if (!out || !inn) return;
+  const s = await Auth.getValidSession();
+  out.classList.toggle("hidden", !!s);
+  inn.classList.toggle("hidden", !s);
+  if (!s) return;
+  document.getElementById("account-email").textContent = s.user?.email || "";
+  try {
+    const p = await Auth.getProfile();
+    const planName = { free: "Free (5 hints/day)", pro: "Pro", pass: "Placement Season Pass" }[p?.plan] || "Free (5 hints/day)";
+    document.getElementById("account-plan").textContent = `Plan: ${planName}`;
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
+function setupAccountUI() {
+  const signInBtn = document.getElementById("google-signin-btn");
+  const signOutBtn = document.getElementById("signout-btn");
+  if (signInBtn) {
+    signInBtn.addEventListener("click", async () => {
+      try {
+        await Auth.signInWithGoogle();
+        state.solvedProblems = await Auth.syncProgress(state.solvedProblems || []);
+        chrome.storage.local.set({ solvedProblems: state.solvedProblems }, () => {
+          if (typeof populateRoadmap === "function") populateRoadmap();
+        });
+        showSystemNotification("Signed in!", "info");
+      } catch (e) {
+        showSystemNotification(e.message || "Sign-in failed", "warning");
+      }
+      refreshAccountUI();
+    });
+  }
+  if (signOutBtn) {
+    signOutBtn.addEventListener("click", async () => {
+      await Auth.signOut();
+      refreshAccountUI();
+    });
+  }
+  refreshAccountUI();
+}

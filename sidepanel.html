@@ -111,10 +111,23 @@
         </button>
       </div>
       <div class="settings-content">
+        <div class="settings-group" id="account-group">
+          <label>Account</label>
+          <div id="account-signed-out">
+            <button id="google-signin-btn" type="button" class="primary-btn">Sign in with Google</button>
+          </div>
+          <div id="account-signed-in" class="hidden">
+            <div id="account-email" style="font-weight:600;margin-bottom:4px;"></div>
+            <div id="account-plan" style="opacity:0.8;margin-bottom:8px;"></div>
+            <button id="signout-btn" type="button" class="primary-btn">Sign out</button>
+          </div>
+        </div>
+
         <div class="settings-group">
           <label for="provider-select">AI Provider</label>
           <select id="provider-select">
-            <option value="groq">Groq (Free & Fast)</option>
+            <option value="algosolveo">AlgoSolveo AI (Sign in, no key needed)</option>
+            <option value="groq">Groq (Your own key)</option>
             <option value="ollama">Ollama (Local LLM)</option>
             <option value="openai">OpenAI (ChatGPT)</option>
           </select>
@@ -318,6 +331,8 @@
   </div>
 
   <script src="markdown.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="auth.js"></script>
   <script src="sidepanel.js"></script>
 </body>
 </html>

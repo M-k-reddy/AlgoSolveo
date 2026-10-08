@@ -2,15 +2,18 @@
   "manifest_version": 3,
   "name": "AlgoSolveo - LeetCode Mentor",
   "version": "1.0.1",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmVEa2ls3TJMEvsv+2autdUZV6g2CIq7n1Z2ERJxBeaxfIBtcNbMQ2JmizYXFLYXARNtghRo6Kz3Y1tQ+HoJtuu0QTrmLVmUXmb2B5XqASJLW3pVuQT9Dwa/73PI9Dju3wHkH1bYy3Ozbd1pos/hgvd62fSembdVPHb9o5wQ1QH8ULN3rfnNjR0ZIay9bRBbpPuGl9YS8ecP3v1DeWq/C81nATSR4ffQklBZVZWLtXGMLGzWWvJv9GNp49bXlmsmd8W4cxQ2Cis4V+fy0CykZXOq95Ks4LzyE0bg1sX/y6AvUeqVQ6N5HQ0rLL1O4XWtGJ6GM1zXH0cH4fwwmiYNf5wIDAQAB",
   "description": "Your AI-powered LeetCode & DSA mentor inside Chrome. Master coding interviews with 5 intelligent modes.",
   "permissions": [
     "sidePanel",
     "activeTab",
     "storage",
-    "scripting"
+    "scripting",
+    "identity"
   ],
   "host_permissions": [
     "https://leetcode.com/*",
+    "https://qxlmqxslpwqbrisywzsp.supabase.co/*",
     "https://api.groq.com/*",
     "https://api.openai.com/*",
     "https://ollama.com/*",
