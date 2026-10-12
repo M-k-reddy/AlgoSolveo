@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your account · AlgoSolveo</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" href="algosolveo-icon128.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" />
+<style>
+:root{--purple:#8B5CF6;--purple-d:#6D28D9;--cyan:#22D3EE;--ink:#0F172A;--ink-2:#334155;--muted:#64748B;--soft:#F8FAFC;--border:#E2E8F0;--green:#16A34A;--red:#DC2626;
+--font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--ink);background:var(--soft);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0}
+header{background:#fff;border-bottom:1px solid var(--border)}
+.nav{max-width:1160px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
+.brand img{width:32px;height:32px}
+.back{font-weight:600;color:var(--ink-2);font-size:15px}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 20px}
+.card{background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:40px;width:100%;max-width:440px;text-align:center}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.sub{color:var(--muted);margin-bottom:28px}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:13px 18px;border-radius:12px;border:1px solid var(--border);background:#fff;font-weight:700;font-size:16px;color:var(--ink);transition:.15s}
+.gbtn:hover{border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.12)}
+.gbtn svg{width:20px;height:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:13px 18px;border-radius:12px;font-weight:700;font-size:16px}
+.btn-primary{background:linear-gradient(135deg,#8B5CF6,#6D28D9);color:#fff;box-shadow:0 8px 20px -6px rgba(109,40,217,.5)}
+.btn-ghost{background:none;color:var(--muted);margin-top:10px;font-weight:600;font-size:15px}
+.avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;background:#EDE9FE;object-fit:cover}
+.email{color:var(--muted);font-size:15px;margin-bottom:24px;word-break:break-all}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;text-align:left}
+.stat{background:var(--soft);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.stat .k{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-size:22px;font-weight:800;margin-top:2px}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:14px;font-weight:700;background:#EDE9FE;color:var(--purple-d)}
+.pill.pro{background:#DCFCE7;color:var(--green)}
+.note{font-size:14px;color:var(--muted);margin-top:16px}
+.err{color:var(--red);font-size:14px;margin-top:14px;min-height:20px}
+.hidden{display:none}
+.spin{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;margin:20px auto;animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+  <a class="brand" href="/"><img src="algosolveo-icon128.png" alt="" />AlgoSolveo</a>
+  <a class="back" href="/">← Back to home</a>
+</div></header>
+
+<main><div class="card">
+  <div id="loading"><div class="spin"></div></div>
+
+  <div id="signed-out" class="hidden">
+    <h1>Sign in to AlgoSolveo</h1>
+    <p class="sub">Use the same Google account as the extension to see your plan and hints.</p>
+    <button class="gbtn" id="google-btn">
+      <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+      Continue with Google
+    </button>
+    <p class="note">New here? Signing in creates your free account: 5 AI hints a day.</p>
+  </div>
+
+  <div id="signed-in" class="hidden">
+    <img class="avatar" id="avatar" alt="" />
+    <h1 id="name">Your account</h1>
+    <p class="email" id="email"></p>
+    <div class="stats">
+      <div class="stat"><div class="k">Plan</div><div class="v"><span class="pill" id="plan">Free</span></div></div>
+      <div class="stat"><div class="k">Hints left today</div><div class="v" id="hints">–</div></div>
+    </div>
+    <p class="note hidden" id="expires"></p>
+    <a class="btn btn-primary" id="upgrade" href="/#pricing">Upgrade to Pro</a>
+    <button class="btn btn-ghost" id="signout">Sign out</button>
+  </div>
+
+  <p class="err" id="err"></p>
+</div></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Publishable key only. It is safe in a public page because Row Level Security protects the data.
+// NEVER put the sb_secret_ / service-role key here.
+const SUPABASE_URL = "https://qxlmqxslpwqbrisywzsp.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_xnrdX1gkErcDhVHZf2l7yA_dFMQSa5k";
+const FREE_DAILY_HINTS = 5; // keep in sync with the hint Edge Function
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { flowType: "pkce", detectSessionInUrl: true, persistSession: true }
+});
+const $ = (id) => document.getElementById(id);
+const show = (id) => ["loading", "signed-out", "signed-in"].forEach(x => $(x).classList.toggle("hidden", x !== id));
+const todayUTC = () => new Date().toISOString().slice(0, 10);
+
+async function render(session) {
+  if (!session) { show("signed-out"); return; }
+  const u = session.user, meta = u.user_metadata || {};
+  $("email").textContent = u.email || "";
+  $("name").textContent = meta.full_name ? "Hi, " + meta.full_name.split(" ")[0] : "Your account";
+  if (meta.avatar_url) $("avatar").src = meta.avatar_url; else $("avatar").classList.add("hidden");
+
+  const { data: p, error } = await sb.from("profiles")
+    .select("plan, plan_expires_at, hints_today, hints_reset_at").eq("id", u.id).maybeSingle();
+  if (error) $("err").textContent = "Couldn't load your plan. Refresh to try again.";
+
+  const plan = p?.plan || "free";
+  const paid = (plan === "pro" || plan === "pass") && (!p.plan_expires_at || new Date(p.plan_expires_at) > new Date());
+  const pill = $("plan");
+  pill.textContent = paid ? (plan === "pro" ? "Pro" : "Week Pass") : "Free";
+  pill.classList.toggle("pro", paid);
+
+  if (paid) {
+    $("hints").textContent = "Unlimited";
+    $("upgrade").classList.add("hidden");
+    if (p.plan_expires_at) {
+      $("expires").textContent = "Active until " + new Date(p.plan_expires_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+      $("expires").classList.remove("hidden");
+    }
+  } else {
+    const used = p && p.hints_reset_at >= todayUTC() ? p.hints_today : 0;
+    $("hints").textContent = Math.max(0, FREE_DAILY_HINTS - used) + " / " + FREE_DAILY_HINTS;
+  }
+  show("signed-in");
+}
+
+$("google-btn").onclick = async () => {
+  $("err").textContent = "";
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: location.origin + "/account.html" }
+  });
+  if (error) $("err").textContent = error.message;
+};
+$("signout").onclick = async () => { await sb.auth.signOut(); show("signed-out"); };
+
+sb.auth.onAuthStateChange((_e, session) => {
+  if (location.search.includes("code=")) history.replaceState({}, "", location.pathname);
+  render(session);
+});
+sb.auth.getSession().then(({ data }) => render(data.session));
+</script>
+</body>
+</html>
