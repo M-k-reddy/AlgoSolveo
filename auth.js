@@ -1,4 +1,4 @@
-// AlgoSolveo <-> Supabase: Google sign-in, session refresh, hosted AI, progress sync.
+// AlgoSolveo <-> Supabase: email-code sign-in, session refresh, hosted AI, progress sync.
 // Load AFTER supabase-config.js and BEFORE sidepanel.js in sidepanel.html.
 // Uses plain fetch (no npm/bundler needed).
 
@@ -35,6 +35,36 @@ const Auth = (() => {
       expires_at: Number(p.get("expires_at")) || Math.floor(Date.now() / 1000) + Number(p.get("expires_in") || 3600),
     };
     if (!session.access_token) throw new Error("No session returned from sign-in.");
+    session.user = await fetchUser(session.access_token);
+    await setSession(session);
+    return session;
+  }
+
+  // ---------- sign in with an email code (no Google needed) ----------
+  async function sendEmailCode(email) {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+      method: "POST",
+      headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ email, create_user: true }),
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.msg || d.error_description || d.message || "Could not send the code. Try again in a minute.");
+    }
+  }
+  async function verifyEmailCode(email, token) {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/verify`, {
+      method: "POST",
+      headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "email", email, token }),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok || !d.access_token) throw new Error(d.msg || d.error_description || "Wrong or expired code.");
+    const session = {
+      access_token: d.access_token,
+      refresh_token: d.refresh_token,
+      expires_at: d.expires_at || Math.floor(Date.now() / 1000) + Number(d.expires_in || 3600),
+    };
     session.user = await fetchUser(session.access_token);
     await setSession(session);
     return session;
@@ -163,7 +193,7 @@ const Auth = (() => {
   }
 
   return {
-    signInWithGoogle, signOut, getSession, getValidSession, getProfile,
+    signInWithGoogle, sendEmailCode, verifyEmailCode, signOut, getSession, getValidSession, getProfile,
     askHostedAI, pullProgress, markSolved, markUnsolved, syncProgress,
   };
 })();

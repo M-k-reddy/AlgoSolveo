@@ -2464,7 +2464,7 @@ function populateHistoryList() {
 
 
 
-// ---------- Account (Supabase Google sign-in) ----------
+// ---------- Account (Supabase email-code sign-in) ----------
 async function refreshAccountUI() {
   const out = document.getElementById("account-signed-out");
   const inn = document.getElementById("account-signed-in");
@@ -2484,23 +2484,47 @@ async function refreshAccountUI() {
 }
 
 function setupAccountUI() {
-  const signInBtn = document.getElementById("google-signin-btn");
   const signOutBtn = document.getElementById("signout-btn");
-  if (signInBtn) {
-    signInBtn.addEventListener("click", async () => {
-      try {
-        await Auth.signInWithGoogle();
-        state.solvedProblems = await Auth.syncProgress(state.solvedProblems || []);
-        chrome.storage.local.set({ solvedProblems: state.solvedProblems }, () => {
-          if (typeof populateRoadmap === "function") populateRoadmap();
-        });
-        showSystemNotification("Signed in!", "info");
-      } catch (e) {
-        showSystemNotification(e.message || "Sign-in failed", "warning");
-      }
-      refreshAccountUI();
+  const $id = (x) => document.getElementById(x);
+  let otpEmail = "";
+  const afterSignIn = async () => {
+    state.solvedProblems = await Auth.syncProgress(state.solvedProblems || []);
+    chrome.storage.local.set({ solvedProblems: state.solvedProblems }, () => {
+      if (typeof populateRoadmap === "function") populateRoadmap();
     });
-  }
+    showSystemNotification("Signed in!", "info");
+  };
+  $id("otp-send-btn")?.addEventListener("click", async () => {
+    const email = ($id("otp-email").value || "").trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showSystemNotification("Enter a valid email.", "warning");
+    try {
+      $id("otp-send-btn").disabled = true;
+      await Auth.sendEmailCode(email);
+      otpEmail = email;
+      $id("otp-msg").textContent = `Code sent to ${email}. Check spam too.`;
+      $id("otp-step-email").classList.add("hidden");
+      $id("otp-step-code").classList.remove("hidden");
+    } catch (e) {
+      showSystemNotification(e.message || "Could not send the code", "warning");
+    } finally { $id("otp-send-btn").disabled = false; }
+  });
+  $id("otp-verify-btn")?.addEventListener("click", async () => {
+    const code = ($id("otp-code").value || "").trim();
+    if (!code) return;
+    try {
+      $id("otp-verify-btn").disabled = true;
+      await Auth.verifyEmailCode(otpEmail, code);
+      await afterSignIn();
+    } catch (e) {
+      showSystemNotification(e.message || "Sign-in failed", "warning");
+    } finally { $id("otp-verify-btn").disabled = false; }
+    refreshAccountUI();
+  });
+  $id("otp-back")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    $id("otp-step-code").classList.add("hidden");
+    $id("otp-step-email").classList.remove("hidden");
+  });
   if (signOutBtn) {
     signOutBtn.addEventListener("click", async () => {
       await Auth.signOut();

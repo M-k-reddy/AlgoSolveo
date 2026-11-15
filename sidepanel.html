@@ -114,7 +114,16 @@
         <div class="settings-group" id="account-group">
           <label>Account</label>
           <div id="account-signed-out">
-            <button id="google-signin-btn" type="button" class="primary-btn">Sign in with Google</button>
+            <div id="otp-step-email">
+              <input id="otp-email" type="email" placeholder="you@example.com" style="width:100%;margin-bottom:8px;" />
+              <button id="otp-send-btn" type="button" class="primary-btn">Email me a code</button>
+            </div>
+            <div id="otp-step-code" class="hidden">
+              <div id="otp-msg" class="help-text" style="margin-bottom:6px;"></div>
+              <input id="otp-code" inputmode="numeric" maxlength="10" placeholder="Enter the code" style="width:100%;margin-bottom:8px;" />
+              <button id="otp-verify-btn" type="button" class="primary-btn">Sign in</button>
+              <a href="#" id="otp-back" class="help-text" style="display:block;margin-top:6px;">Use a different email</a>
+            </div>
           </div>
           <div id="account-signed-in" class="hidden">
             <div id="account-email" style="font-weight:600;margin-bottom:4px;"></div>
