@@ -13,7 +13,7 @@ let state = {
   // Multi-Provider settings
   provider: "groq", // groq, ollama, openai
   groqKey: "",
-  groqModel: "llama-3.3-70b-versatile",
+  groqModel: "openai/gpt-oss-20b",
   ollamaUrl: "https://ollama.com/api",
   ollamaKey: "",
   ollamaModel: "gpt-oss:20b",

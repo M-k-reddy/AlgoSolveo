@@ -11,7 +11,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const FREE_DAILY_HINTS = 5;
 const OLLAMA_MODEL = Deno.env.get("OLLAMA_MODEL") ?? "gpt-oss:20b";
-const GROQ_MODELS = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"];
+const GROQ_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b"];
 const MAX_MESSAGES = 40;
 const MAX_CHARS = 60_000;
 
