@@ -125,7 +125,7 @@ async function loadSettings() {
           state.provider = "groq";
         }
         state.groqKey = result.groqKey || "";
-        state.groqModel = result.groqModel || "llama-3.3-70b-versatile";
+        state.groqModel = (result.groqModel && !/^(llama|deepseek)/.test(result.groqModel)) ? result.groqModel : "openai/gpt-oss-20b";
         state.ollamaUrl = result.ollamaUrl || "https://ollama.com/api";
         state.ollamaKey = result.ollamaKey || "";
         state.ollamaModel = result.ollamaModel || "gpt-oss:20b";
